@@ -31,4 +31,19 @@ class Database
             die('Erro: ' . $e->getMessage());
         }
     }
+    
+    public function select($where = null, $fields = '*')
+    {
+        $where = isset($where) ? " WHERE " . $where : "";
+
+        $query = "SELECT " . $fields . " FROM " . $this->table . $where;
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die('Erro:' . $e->getMessage());
+        }
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
