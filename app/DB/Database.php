@@ -18,7 +18,7 @@ class Database
 
     private function connection()
     {
-        $config    = parse_ini_file(ROOT_PATH . '/config/config.ini');
+        $config    = parse_ini_file(__DIR__ . '/../../config/config.ini');
         $stringPDO = $config['DB_CONNECTION'] . ':' . 'host=' . $config['DB_HOST'] . ';' 
                              . 'dbname=' . $config['DB_DATABASE'];
         $userDB    = $config['DB_USERNAME'];
