@@ -2,12 +2,12 @@
 
 namespace App\DB;
 
+use App\Config;
 use PDO;
 use PDOException;
 
 class Database
 {
-    private $table;
     private $connection;
 
     public function __construct($table = null)
@@ -16,13 +16,13 @@ class Database
         $this->connection();
     }
 
-    private function connection()
+    protected function connection()
     {
-        $config    = parse_ini_file(__DIR__ . '/../../config/config.ini');
-        $stringPDO = $config['DB_CONNECTION'] . ':' . 'host=' . $config['DB_HOST'] . ';' 
-                             . 'dbname=' . $config['DB_DATABASE'];
-        $userDB    = $config['DB_USERNAME'];
-        $passDB    = $config['DB_PASSWORD'];
+        $configDB  = (new Config)->database();
+        $stringPDO = $configDB['DB_CONNECTION'] . ':' . 'host=' . $configDB['DB_HOST'] . ';' 
+                             . 'dbname=' . $configDB['DB_DATABASE'];
+        $userDB    = $configDB['DB_USERNAME'];
+        $passDB    = $configDB['DB_PASSWORD'];
 
         try {
             $this->connection = new PDO($stringPDO, $userDB, $passDB);
@@ -31,19 +31,15 @@ class Database
             die('Erro: ' . $e->getMessage());
         }
     }
-    
-    public function select($where = null, $fields = '*')
-    {
-        $where = isset($where) ? " WHERE " . $where : "";
 
-        $query = "SELECT " . $fields . " FROM " . $this->table . $where;
+    public function execute($query, $params = [])
+    {
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->execute();
+            $statement = $this->connection->prepare($query);
+            $statement->execute($params);
+            return $statement;
         } catch (PDOException $e) {
-            die('Erro:' . $e->getMessage());
+            die('Error: ' . $e->getMessage());
         }
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
     }
 }
