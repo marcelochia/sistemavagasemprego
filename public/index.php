@@ -12,14 +12,18 @@ $app = AppFactory::create();
 
 $app->addErrorMiddleware(true, false, false);
 
-$app->get('/vagas', VagaController::class . ':index');
+$app->get('/vagas/novo', VagaController::class . ':create');
+
+$app->post('/vagas/gravar', VagaController::class . ':store');
 
 $app->post('/vagas/{id}/atualizar', VagaController::class . ':update');
 
+$app->get('/vagas/{id}/editar', VagaController::class . ':show');
+
+$app->get('/vagas/{id}/apagar', VagaController::class . ':destroy');
+
 $app->get('/vagas/{id}', VagaController::class . ':show');
 
-$app->post('/vagas/novo', VagaController::class . ':create');
-
-$app->delete('/vagas/{id}/apagar', VagaController::class . ':destroy');
+$app->get('/vagas', VagaController::class . ':index');
 
 $app->run();

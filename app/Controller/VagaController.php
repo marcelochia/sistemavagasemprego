@@ -5,32 +5,65 @@ namespace App\Controller;
 use App\Model\Vaga;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class VagaController
 {
     public static function index(Request $request, Response $response)
     {
         $vagas = new Vaga();
-        $vagas = json_encode($vagas->listarTodos(), JSON_PRETTY_PRINT);
-        $response->getBody()->write($vagas);
+        $vagas = $vagas->listarTodos();
+        
+        $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
+        $twig = new Environment($loader);
+        $template = $twig->load('vagas.html');
+        
+        $params = array();
+        $params['vagas'] = $vagas;
+
+        $content = $template->render($params);
+        echo $content;
+
+        return $response;
+    }
+    
+    public static function create(Request $request, Response $response)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
+        $twig = new Environment($loader);
+        $template = $twig->load('formulario.html');
+
+        $content = $template->render();
+        echo $content;
+
         return $response;
     }
 
     public static function show(Request $request, Response $response, array $args)
     {
+        $uri = $_SERVER['REQUEST_URI'];
         $vaga = new Vaga();
         $id = $args['id'];
-        $vaga = json_encode($vaga->listar($id), JSON_PRETTY_PRINT);
-        $response->getBody()->write($vaga);
+        $vaga = $vaga->listar($id);
+
+        $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
+        $twig = new Environment($loader);
+        $template = $twig->load('formulario.html');
+
+        $content = $template->render($vaga[0]);
+        echo $content;
+        
         return $response;
     }
 
-    public static function create(Request $request, Response $response)
+    public static function store(Request $request, Response $response)
     {
         $vaga = new Vaga();
-        $data = $request->getParsedBody();
+        $data = $_POST;
         $vaga->inserir($data);
-        return $response;
+        header('Location: /vagas');
+        exit;
     }
 
     public static function update(Request $request, Response $response, array $args)
@@ -38,17 +71,17 @@ class VagaController
         $vaga = new Vaga();
         $id = $args['id'];
         $values = $request->getParsedBody();
-        // print_r($values);die;
         $vaga->atualizar($id, $values);
-        return $response;
+        header('Location: /vagas');
+        exit;
     }
 
     public static function destroy(Request $request, Response $response, array $args)
     {
-        print_r($request);die;
         $vaga = new Vaga();
         $id = $args['id'];
         $vaga->apagar($id);
-        return $response;
+        header('Location: /vagas');
+        exit;
     }
 }

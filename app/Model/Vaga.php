@@ -56,6 +56,5 @@ class Vaga
     {
         $query = (new QueryBuilder())->delete()->from($this->table)->where("{$this->columns[0]} = {$id}");
         $delete = (new Database())->execute($query);
-        return $delete->rowCount();
     }
 }

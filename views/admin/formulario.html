@@ -1,0 +1,101 @@
+{% extends "template.html" %}
+
+{% block content %}
+  <div class="pt-3 pb-2">
+    <div class="row">
+        <div class="col">
+          {% if ID is defined %}
+            <h1 class="h2">Vaga: #{{ ID }} {{ TITULO }}</h1>
+          {% else %}
+            <h1 class="h2">Nova vaga</h1>
+          {% endif %}
+        </div>
+        <div class="col-2">
+            <a class="btn btn-secondary" href="/vagas" role="button">Voltar</a>
+        </div>
+    </div>
+    <div class="col-9 pt-3 pb-2 mt-3">
+      {% if ID is defined %}
+        <form method="POST" action="/vagas/{{ID}}/atualizar">
+      {% else %}
+        <form method="POST" action="/vagas/gravar">
+      {% endif %}
+        <div class="row mb-3">
+          <label for="titulo" class="col-sm-2 col-form-label">Título</label>
+          <div class="col-sm-10">
+              <input type="text" class="form-control" name="titulo" id="titulo" value="{{ TITULO }}">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-10 offset-sm-2">
+            <div class="form-check">
+              {% if STATUS == 'I' %}
+                <input type="hidden" name="status" value="A">
+                <input class="form-check-input" type="checkbox" name="status" id="status" value="I">
+                {% else %}
+                <input type="hidden" name="status" value="I">
+                <input class="form-check-input" type="checkbox" name="status" id="status" value="A" checked>
+              {% endif %}
+              <label class="form-check-label" for="status">
+                Anúncio ativo
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="area" class="col-sm-2 col-form-label">Área</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="area" id="area">
+              {% set selected = '' %}
+              {% if AREA is defined %}
+                {% set selected = 'selected' %}
+              {% endif %}
+              <option>-- Selecione --</option>
+              <option value="Administrativo" {% if AREA == 'Administrativo' %}{{ selected }}{% endif %}>Administrativo</option>
+              <option value="Contábil" {% if AREA == 'Contábil' %}{{ selected }}{% endif %}>Contábil</option>
+              <option value="Educação" {% if AREA == 'Educação' %}{{ selected }}{% endif %}>Educação</option>
+              <option value="Engenharia" {% if AREA == 'Engenharia' %}{{ selected }}{% endif %}>Engenharia</option>
+              <option value="Marketing" {% if AREA == 'Marketing' %}{{ selected }}{% endif %}>Marketing</option>
+              <option value="Recursos Humanos" {% if AREA == 'Recursos Humanos' %}{{ selected }}{% endif %}>Recursos Humanos</option>
+              <option value="Tecnologia" {% if AREA == 'Tecnologia' %}{{ selected }}{% endif %}>Tecnologia</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="tipo_contrato" class="col-sm-2 col-form-label">Contrato</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="tipo_contrato" id="tipo_contrato">
+              {% set selected = '' %}
+              {% if TIPO_CONTRATO is defined %}
+                {% set selected = 'selected' %}
+              {% endif %}
+              <option>-- Selecione --</option>
+              <option value="CLT" {% if TIPO_CONTRATO == 'CLT' %}{{ selected }}{% endif %}>CLT</option>
+              <option value="Estágio" {% if TIPO_CONTRATO == 'Estágio' %}{{ selected }}{% endif %}>Estágio</option>
+              <option value="Freelance" {% if TIPO_CONTRATO == 'Freelance' %}{{ selected }}{% endif %}>Freelance</option>
+              <option value="PJ" {% if TIPO_CONTRATO == 'PJ' %}{{ selected }}{% endif %}>PJ</option>
+              <option value="Trainee" {% if TIPO_CONTRATO == 'Trainee' %}{{ selected }}{% endif %}>Trainee</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="salario" class="col-sm-2 col-form-label">Salário</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="salario" id="salario" value="{{ SALARIO }}">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="descricao" class="col-sm-2 col-form-label">Detalhes</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" name="descricao" id="descricao" style="height: 100px">{{ DESCRICAO }}</textarea>
+          </div>
+        </div>
+        {% if ID is defined %}
+          <button type="submit" class="btn btn-primary">Atualizar informações</button>
+        {% else %}
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+{% endblock %}
