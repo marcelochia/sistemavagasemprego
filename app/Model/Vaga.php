@@ -4,7 +4,6 @@ namespace App\Model;
 
 use App\DB\Database;
 use App\DB\QueryBuilder;
-use DateTime;
 use PDO;
 
 class Vaga
@@ -55,6 +54,6 @@ class Vaga
     public function apagar($id)
     {
         $query = (new QueryBuilder())->delete()->from($this->table)->where("{$this->columns[0]} = {$id}");
-        $delete = (new Database())->execute($query);
+        (new Database())->execute($query);
     }
 }
