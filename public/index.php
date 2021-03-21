@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-// session_destroy();
 
 use App\Config;
 use App\Controller\UsuarioController;
