@@ -12,6 +12,8 @@ class VagaController
 {
     public static function index(Request $request, Response $response)
     {
+        UsuarioController::verificaLogin();
+
         $vagas = new Vaga();
         $vagas = $vagas->listarTodos();
         
@@ -21,6 +23,7 @@ class VagaController
         
         $params = array();
         $params['vagas'] = $vagas;
+        $params['usuario_sistema'] = $_SESSION['UsuarioSistema'];
 
         $content = $template->render($params);
         echo $content;
@@ -30,11 +33,14 @@ class VagaController
     
     public static function create(Request $request, Response $response)
     {
+        UsuarioController::verificaLogin();
+
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
         $template = $twig->load('formulario.html');
 
-        $content = $template->render();
+        $params['usuario_sistema'] = $_SESSION['UsuarioSistema'];
+        $content = $template->render($params);
         echo $content;
 
         return $response;
@@ -42,10 +48,12 @@ class VagaController
 
     public static function show(Request $request, Response $response, array $args)
     {
+        UsuarioController::verificaLogin();
+        
         $uri = $_SERVER['REQUEST_URI'];
         $vaga = new Vaga();
         $id = $args['id'];
-        $vaga = $vaga->listar($id);
+        $vaga = $vaga->exibir($id);
 
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);

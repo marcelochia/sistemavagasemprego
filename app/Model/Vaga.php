@@ -29,7 +29,7 @@ class Vaga
         return $result;
     }
 
-    public function listar(int $id)
+    public function exibir(int $id)
     {
         $query = (new QueryBuilder())->select('*')->from($this->table)->where("{$this->columns[0]} = {$id}");
         $result = (new Database())->execute($query)->fetchAll(PDO::FETCH_ASSOC);

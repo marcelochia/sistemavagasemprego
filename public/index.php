@@ -1,6 +1,10 @@
 <?php
 
+session_start();
+// session_destroy();
+
 use App\Config;
+use App\Controller\UsuarioController;
 use App\Controller\VagaController;
 use Slim\Factory\AppFactory;
 
@@ -25,5 +29,11 @@ $app->get('/vagas/{id}/apagar', VagaController::class . ':destroy');
 $app->get('/vagas/{id}', VagaController::class . ':show');
 
 $app->get('/vagas', VagaController::class . ':index');
+
+$app->post('/login', UsuarioController::class . ':login');
+
+$app->get('/logout', UsuarioController::class . ':logout');
+
+$app->get('/', UsuarioController::class . ':loginPage');
 
 $app->run();
