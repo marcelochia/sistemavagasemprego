@@ -12,14 +12,14 @@ class VagaController
 {
     public static function index(Request $request, Response $response)
     {
-        UsuarioController::verificaLogin();
+        LoginController::verificaLogin();
 
         $vagas = new Vaga();
         $vagas = $vagas->listarTodos();
         
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
-        $template = $twig->load('vagas.html');
+        $template = $twig->load('vagas/vagas.html');
         
         $params = array();
         $params['vagas'] = $vagas;
@@ -33,11 +33,11 @@ class VagaController
     
     public static function create(Request $request, Response $response)
     {
-        UsuarioController::verificaLogin();
+        LoginController::verificaLogin();
 
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
-        $template = $twig->load('formulario.html');
+        $template = $twig->load('vagas/formulario.html');
 
         $params['usuario_sistema'] = $_SESSION['UsuarioSistema'];
         $content = $template->render($params);
@@ -48,16 +48,15 @@ class VagaController
 
     public static function show(Request $request, Response $response, array $args)
     {
-        UsuarioController::verificaLogin();
+        LoginController::verificaLogin();
         
-        $uri = $_SERVER['REQUEST_URI'];
         $vaga = new Vaga();
         $id = $args['id'];
         $vaga = $vaga->exibir($id);
 
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
-        $template = $twig->load('formulario.html');
+        $template = $twig->load('vagas/formulario.html');
 
         $content = $template->render($vaga[0]);
         echo $content;

@@ -10,56 +10,85 @@ use Twig\Loader\FilesystemLoader;
 
 class UsuarioController extends Controller
 {
-    const SESSION = "Usuario";
-
-    public static function verificaLogin()
+    public static function index(Request $request, Response $response)
     {
-        if (!isset($_SESSION['UsuarioSistema']) 
-            || !$_SESSION) {
-            header('Location: /');
-            exit;
-        }
+        LoginController::verificaLogin();
+
+        $usuarios = new Usuario();
+        $usuarios = $usuarios->listarTodos();
+        
+        $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
+        $twig = new Environment($loader);
+        $template = $twig->load('usuarios/usuarios.html');
+        
+        $params = array();
+        $params['usuarios'] = $usuarios;
+        $params['usuario_sistema'] = $_SESSION['UsuarioSistema'];
+
+        $content = $template->render($params);
+        echo $content;
+
+        return $response;
     }
     
-    public static function loginPage(Request $request, Response $response)
+    public static function create(Request $request, Response $response)
     {
-        $loader = new FilesystemLoader(__DIR__ . '/../../views');
-        $twig = new Environment($loader);
-        $template = $twig->load('login.html');
+        LoginController::verificaLogin();
 
-        $content = $template->render();
+        $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
+        $twig = new Environment($loader);
+        $template = $twig->load('usuarios/formulario.html');
+
+        $params['usuario_sistema'] = $_SESSION['UsuarioSistema'];
+        $content = $template->render($params);
         echo $content;
 
         return $response;
     }
 
-    public static function login()
+    public static function show(Request $request, Response $response, array $args)
     {
-        $result = Usuario::getUsuario($_POST['usuario'], $_POST['senha']);
+        LoginController::verificaLogin();
+        
+        $usuario = new Usuario();
+        $id = $args['id'];
+        $usuario = $usuario->exibir($id);
 
-        if (count($result) === 0) {
-            throw new \Exception("Verifique se o usuário ou a senha estão corretos");
-        }
+        $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
+        $twig = new Environment($loader);
+        $template = $twig->load('formulario.html');
 
-        $data = $result[0];
-
-        if (password_verify($_POST['senha'], $data["SENHA"]) === true) {
-            $usuario = new Usuario();
-            $usuario->setData($data);
-
-            $_SESSION['UsuarioSistema'] = $usuario->getValues();
-
-            header("Location: /vagas");
-            exit;
-        } else {
-            throw new \Exception("Usuário ou senha incorretas");
-        } 
+        $content = $template->render($usuario[0]);
+        echo $content;
+        
+        return $response;
     }
 
-    public static function logout()
+    public static function store(Request $request, Response $response)
     {
-        session_unset();
-        header('Location: /');
+        $usuario = new Usuario();
+        $data = $_POST;
+        $usuario->inserir($data);
+        header('Location: /vagas');
+        exit;
+    }
+
+    public static function update(Request $request, Response $response, array $args)
+    {
+        $usuario = new Usuario();
+        $id = $args['id'];
+        $values = $request->getParsedBody();
+        $usuario->atualizar($id, $values);
+        header('Location: /vagas');
+        exit;
+    }
+
+    public static function destroy(Request $request, Response $response, array $args)
+    {
+        $usuario = new Usuario();
+        $id = $args['id'];
+        $usuario->apagar($id);
+        header('Location: /vagas');
         exit;
     }
 }
