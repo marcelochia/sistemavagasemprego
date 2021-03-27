@@ -48,6 +48,8 @@ $app->get('/usuarios/{id}', UsuarioController::class . ':show');
 
 $app->get('/usuarios', UsuarioController::class . ':index');
 
+// Login
+
 $app->post('/login', LoginController::class . ':login');
 
 $app->get('/logout', LoginController::class . ':logout');
