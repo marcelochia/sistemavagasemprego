@@ -12,9 +12,6 @@ class Usuario extends Model
     
     public static function getUsuario($usuario)
     {
-        $table = $this->table;
-        echo $table;die;
-        $table = 123;
         $query = (new QueryBuilder())->select('*')->from($table)->where("USUARIO = '{$usuario}'");
         $result = (new Database())->execute($query)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
