@@ -10,6 +10,7 @@ class QueryBuilder
     private $from       = [];
     private $binds      = [];
     private $set;
+    private $limit;
 
     public function __toString(): string
     {
@@ -23,7 +24,8 @@ class QueryBuilder
                 . $set
                 . $from
                 . $binds
-                . $where;
+                . $where
+                . $this->limit;
     }
 
     public function select(string ...$select): self
@@ -71,6 +73,12 @@ class QueryBuilder
         foreach ($where as $arg) {
             $this->conditions[] = $arg;
         }
+        return $this;
+    }
+
+    public function limit(int $limit)
+    {
+        $this->limit = " LIMIT {$limit}";
         return $this;
     }
 
