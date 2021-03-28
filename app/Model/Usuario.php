@@ -9,6 +9,17 @@ use PDO;
 class Usuario extends Model
 {
     protected $table = 'USUARIOS_SISTEMA';
+
+    protected $columns = [
+        'id',
+        'usuario',
+        'senha',
+        'nome',
+        'email',
+        'administrador',
+        'data_criacao',
+        'data_alteracao'
+    ];
     
     public static function getUsuario($usuario)
     {

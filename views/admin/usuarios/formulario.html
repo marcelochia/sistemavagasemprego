@@ -1,0 +1,67 @@
+{% extends "template.html" %}
+
+{% block content %}
+  <div class="pt-3 pb-2">
+    <div class="row">
+        <div class="col">
+          <h1 class="h2">Novo usuário</h1>
+        </div>
+        <div class="col-2">
+            <a class="btn btn-secondary" href="/usuarios" role="button">Voltar</a>
+        </div>
+    </div>
+    <div class="col-9 pt-3 pb-2 mt-3">
+      {% if ID is defined %}
+        <form method="POST" action="/usuarios/{{ID}}/atualizar">
+      {% else %}
+        <form method="POST" action="/usuarios/gravar">
+      {% endif %}
+        <div class="row mb-3">
+          <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+          <div class="col-sm-10">
+              <input type="text" class="form-control" name="nome" id="nome" value="{{ NOME }}" autofocus required>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-10 offset-sm-2">
+            <div class="form-check">
+              {% if ADMINISTRADOR == '1' %}
+                <input type="hidden" name="administrador" value="1">
+                <input class="form-check-input" type="checkbox" name="administrador" id="administrador" value="0">
+                {% else %}
+                <input type="hidden" name="administrador" value="0">
+                <input class="form-check-input" type="checkbox" name="administrador" id="administrador" value="1" checked>
+              {% endif %}
+              <label class="form-check-label" for="administrador">
+                Administrador?
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="usuario" class="col-sm-2 col-form-label">Usuário</label>
+          <div class="col-sm-10">
+              <input type="text" class="form-control" name="usuario" id="usuario" value="{{ USUARIO }}" required>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+          <div class="col-sm-10">
+              <input type="email" class="form-control" name="email" id="email" value="{{ EMAIL }}" required>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="senha" class="col-sm-2 col-form-label">Senha</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" name="senha" id="senha" value="{{ SENHA }}" required>
+          </div>
+        </div>
+        {% if ID is defined %}
+          <button type="submit" class="btn btn-primary">Atualizar informações</button>
+        {% else %}
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+{% endblock %}

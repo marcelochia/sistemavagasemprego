@@ -12,7 +12,7 @@ class UsuarioController extends Controller
 {
     public static function index(Request $request, Response $response)
     {
-        LoginController::verificaLogin();
+        LoginController::verificaLogin(true);
 
         $usuarios = new Usuario();
         $usuarios = $usuarios->listarTodos();
@@ -33,7 +33,7 @@ class UsuarioController extends Controller
     
     public static function create(Request $request, Response $response)
     {
-        LoginController::verificaLogin();
+        LoginController::verificaLogin(true);
 
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
@@ -48,7 +48,7 @@ class UsuarioController extends Controller
 
     public static function show(Request $request, Response $response, array $args)
     {
-        LoginController::verificaLogin();
+        LoginController::verificaLogin(true);
         
         $usuario = new Usuario();
         $id = $args['id'];
@@ -56,7 +56,7 @@ class UsuarioController extends Controller
 
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
-        $template = $twig->load('formulario.html');
+        $template = $twig->load('usuarios/formulario.html');
 
         $content = $template->render($usuario[0]);
         echo $content;
@@ -67,9 +67,19 @@ class UsuarioController extends Controller
     public static function store(Request $request, Response $response)
     {
         $usuario = new Usuario();
-        $data = $_POST;
-        $usuario->inserir($data);
-        header('Location: /vagas');
+
+        $values = $request->getParsedBody();
+
+        foreach ($values as $key => $value) {
+            if ($value == '') {
+                throw new \Exception("O campo deve ser preenchido.");
+            }
+        }
+        
+        $values['senha'] = password_hash($values['senha'], PASSWORD_DEFAULT);
+        $usuario->inserir($values);
+        
+        header('Location: /usuarios');
         exit;
     }
 
@@ -77,9 +87,12 @@ class UsuarioController extends Controller
     {
         $usuario = new Usuario();
         $id = $args['id'];
+
         $values = $request->getParsedBody();
+        $values['senha'] = password_hash($values['senha'], PASSWORD_DEFAULT);
         $usuario->atualizar($id, $values);
-        header('Location: /vagas');
+
+        header('Location: /usuarios');
         exit;
     }
 
@@ -88,7 +101,7 @@ class UsuarioController extends Controller
         $usuario = new Usuario();
         $id = $args['id'];
         $usuario->apagar($id);
-        header('Location: /vagas');
+        header('Location: /usuarios');
         exit;
     }
 }
