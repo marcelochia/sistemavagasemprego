@@ -11,11 +11,16 @@ use Twig\Loader\FilesystemLoader;
 
 class LoginController extends Controller
 {
-    public static function verificaLogin()
+    public static function verificaLogin($onlyAdmin = false)
     {
         if (!isset($_SESSION['UsuarioSistema']) 
             || !$_SESSION) {
             header('Location: /');
+            exit;
+        }
+        
+        if (($onlyAdmin) && ($_SESSION['UsuarioSistema']['ADMINISTRADOR'] === '0')) {
+            header('Location: /vagas');
             exit;
         }
     }
@@ -47,6 +52,7 @@ class LoginController extends Controller
             $usuario->setData($data);
 
             $_SESSION['UsuarioSistema'] = $usuario->getValues();
+            unset($_SESSION['UsuarioSistema']['SENHA']);
 
             header("Location: /vagas");
             exit;
