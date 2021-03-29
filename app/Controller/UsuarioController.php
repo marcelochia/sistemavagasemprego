@@ -49,11 +49,14 @@ class UsuarioController extends Controller
     public static function show(Request $request, Response $response, array $args)
     {
         LoginController::verificaLogin(true);
-        
+
         $usuario = new Usuario();
         $id = $args['id'];
         $usuario = $usuario->exibir($id);
 
+        $usuario[0]['DATA_CRIACAO'] = date('d/m/Y - H:m:s', strtotime($usuario[0]['DATA_CRIACAO']));
+        $usuario[0]['DATA_ALTERACAO'] = date('d/m/Y - H:m:s', strtotime($usuario[0]['DATA_ALTERACAO']));
+        
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
         $template = $twig->load('usuarios/formulario.html');

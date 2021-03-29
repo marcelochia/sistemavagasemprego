@@ -4,11 +4,25 @@
   <div class="pt-3 pb-2">
     <div class="row">
         <div class="col">
-          <h1 class="h2">Novo usuário</h1>
+          {% if ID is defined %}
+            <h1 class="h2">Usuário: {{ ID }} - {{ NOME }}</h1>
+          {% else %}
+            <h1 class="h2">Novo usuário</h1>
+          {% endif %}
         </div>
         <div class="col-2">
             <a class="btn btn-secondary" href="/usuarios" role="button">Voltar</a>
         </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Criado em: {{ DATA_CRIACAO }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Atualizado em: {{ DATA_ALTERACAO }}</p>
+      </div>
     </div>
     <div class="col-9 pt-3 pb-2 mt-3">
       {% if ID is defined %}
@@ -23,17 +37,24 @@
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-sm-10 offset-sm-2">
-            <div class="form-check">
-              {% if ADMINISTRADOR == '1' %}
-                <input type="hidden" name="administrador" value="1">
-                <input class="form-check-input" type="checkbox" name="administrador" id="administrador" value="0">
-                {% else %}
-                <input type="hidden" name="administrador" value="0">
-                <input class="form-check-input" type="checkbox" name="administrador" id="administrador" value="1" checked>
+          <label for="administrador" class="col-sm-2 col-form-label">Administrador</label>
+          <div class="col-sm-10">
+            {% set checked = '' %}
+              {% if ADMINISTRADOR is defined %}
+                {% set checked = 'checked' %}
               {% endif %}
-              <label class="form-check-label" for="administrador">
-                Administrador?
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="administrador" id="administradorSim" value="1" 
+                {% if ADMINISTRADOR == '1' %}{{ checked }}{% endif %}>
+              <label class="form-check-label" for="administradorSim">
+                Sim
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="administrador" id="administradorNao" value="0"
+                {% if ADMINISTRADOR == '0' %}{{ checked }}{% endif %}>
+              <label class="form-check-label" for="administradorNao">
+                Não
               </label>
             </div>
           </div>
@@ -57,9 +78,9 @@
           </div>
         </div>
         {% if ID is defined %}
-          <button type="submit" class="btn btn-primary">Atualizar informações</button>
+        <button type="submit" class="btn btn-primary">Atualizar informações</button>
         {% else %}
-          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
         {% endif %}
       </form>
     </div>
