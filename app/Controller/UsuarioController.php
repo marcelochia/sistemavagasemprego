@@ -82,7 +82,7 @@ class UsuarioController extends Controller
         $values['senha'] = password_hash($values['senha'], PASSWORD_DEFAULT);
         $usuario->inserir($values);
         
-        header('Location: /usuarios');
+        header('Location: /painel/usuarios');
         exit;
     }
 
@@ -95,7 +95,7 @@ class UsuarioController extends Controller
         $values['senha'] = password_hash($values['senha'], PASSWORD_DEFAULT);
         $usuario->atualizar($id, $values);
 
-        header('Location: /usuarios');
+        header('Location: /painel/usuarios');
         exit;
     }
 
@@ -104,7 +104,7 @@ class UsuarioController extends Controller
         $usuario = new Usuario();
         $id = $args['id'];
         $usuario->apagar($id);
-        header('Location: /usuarios');
+        header('Location: /painel/usuarios');
         exit;
     }
 }

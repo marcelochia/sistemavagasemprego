@@ -15,12 +15,12 @@ class LoginController extends Controller
     {
         if (!isset($_SESSION['UsuarioSistema']) 
             || !$_SESSION) {
-            header('Location: /');
+            header('Location: /painel');
             exit;
         }
         
         if (($onlyAdmin) && ($_SESSION['UsuarioSistema']['ADMINISTRADOR'] === '0')) {
-            header('Location: /vagas');
+            header('Location: /painel/vagas');
             exit;
         }
     }
@@ -54,7 +54,7 @@ class LoginController extends Controller
             $_SESSION['UsuarioSistema'] = $usuario->getValues();
             unset($_SESSION['UsuarioSistema']['SENHA']);
 
-            header("Location: /vagas");
+            header("Location: /painel/vagas");
             exit;
         } else {
             throw new \Exception("Usuário ou senha incorretas");
@@ -64,7 +64,7 @@ class LoginController extends Controller
     public static function logout()
     {
         session_unset();
-        header('Location: /');
+        header('Location: /painel');
         exit;
     }
 }

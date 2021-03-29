@@ -11,14 +11,14 @@
           {% endif %}
         </div>
         <div class="col-2">
-            <a class="btn btn-secondary" href="/vagas" role="button">Voltar</a>
+            <a class="btn btn-secondary" href="/painel/vagas" role="button">Voltar</a>
         </div>
     </div>
     <div class="col-9 pt-3 pb-2 mt-3">
       {% if ID is defined %}
-        <form method="POST" action="/vagas/{{ID}}/atualizar">
+        <form method="POST" action="/painel/vagas/{{ID}}/atualizar">
       {% else %}
-        <form method="POST" action="/vagas/gravar">
+        <form method="POST" action="/painel/vagas/gravar">
       {% endif %}
         <div class="row mb-3">
           <label for="titulo" class="col-sm-2 col-form-label">Título</label>

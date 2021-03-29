@@ -69,7 +69,7 @@ class VagaController
         $vaga = new Vaga();
         $data = $_POST;
         $vaga->inserir($data);
-        header('Location: /vagas');
+        header('Location: /painel/vagas');
         exit;
     }
 
@@ -79,7 +79,7 @@ class VagaController
         $id = $args['id'];
         $values = $request->getParsedBody();
         $vaga->atualizar($id, $values);
-        header('Location: /vagas');
+        header('Location: /painel/vagas');
         exit;
     }
 
@@ -88,7 +88,7 @@ class VagaController
         $vaga = new Vaga();
         $id = $args['id'];
         $vaga->apagar($id);
-        header('Location: /vagas');
+        header('Location: /painel/vagas');
         exit;
     }
 }
