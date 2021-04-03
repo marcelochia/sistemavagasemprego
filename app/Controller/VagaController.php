@@ -15,7 +15,7 @@ class VagaController
         LoginController::verificaLogin();
 
         $vagas = new Vaga();
-        $vagas = $vagas->listarTodos();
+        $vagas = $vagas->listar();
         
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);

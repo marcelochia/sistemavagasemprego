@@ -15,7 +15,7 @@ class UsuarioController extends Controller
         LoginController::verificaLogin(true);
 
         $usuarios = new Usuario();
-        $usuarios = $usuarios->listarTodos();
+        $usuarios = $usuarios->listar();
         
         $loader = new FilesystemLoader(__DIR__ . '/../../views/admin');
         $twig = new Environment($loader);
