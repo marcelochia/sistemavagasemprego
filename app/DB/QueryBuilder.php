@@ -76,9 +76,9 @@ class QueryBuilder
         return $this;
     }
 
-    public function limit(int $limit)
+    public function limit(int $init, int $max)
     {
-        $this->limit = " LIMIT {$limit}";
+        $this->limit = " LIMIT {$init}, {$max}";
         return $this;
     }
 

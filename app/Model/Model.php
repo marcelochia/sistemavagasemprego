@@ -37,9 +37,9 @@ class Model {
         return $this->values;
     }
 
-    public function listarTodos()
+    public function listar($fields = '*', $init = 0, $max = 9223372036854775807)
     {
-        $query = (new QueryBuilder())->select('*')->from($this->table);
+        $query = (new QueryBuilder())->select($fields)->from($this->table)->limit($init, $max);
         $result = (new Database())->execute($query)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }

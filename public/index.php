@@ -6,6 +6,7 @@ use App\Config;
 use App\Controller\LoginController;
 use App\Controller\UsuarioController;
 use App\Controller\VagaController;
+use App\Controller\VagasPublicoController;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -15,6 +16,10 @@ date_default_timezone_set((new Config)->timezone());
 $app = AppFactory::create();
 
 $app->addErrorMiddleware(true, false, false);
+
+// Publico
+
+$app->get('/', VagasPublicoController::class . ':index');
 
 // Vaga
 
